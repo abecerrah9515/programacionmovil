@@ -1,12 +1,11 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Your Events</ion-title>
-    <ion-button 
-      (click)="exit()"
-    >
-      Salir
-    </ion-button>
-  </ion-toolbar>  
+    <ion-buttons slot="end">
+      <ion-button routerLink="/tutorials" color="medium">Tutoriales</ion-button>
+      <ion-button (click)="exit()">Salir</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">

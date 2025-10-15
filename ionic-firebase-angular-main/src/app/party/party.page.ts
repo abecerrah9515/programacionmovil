@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import {
+  IonButtons,
   IonContent,
   IonFab,
   IonHeader,
@@ -11,7 +12,9 @@ import {
   IonLabel,
   IonList,
   IonTitle,
-  IonToolbar, IonButton } from '@ionic/angular/standalone';
+  IonToolbar,
+  IonButton,
+} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { add } from 'ionicons/icons';
 import { Observable } from 'rxjs';
@@ -25,7 +28,8 @@ import { Router } from '@angular/router';
   templateUrl: './party.page.html',
   styleUrls: ['./party.page.scss'],
   standalone: true,
-  imports: [IonButton, 
+  imports: [IonButton,
+    IonButtons,
     IonIcon,
     IonFab,
     IonLabel,
