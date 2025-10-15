@@ -16,6 +16,11 @@ export const routes: Routes = [
     data: { authGuardPipe: redirectUnauthorizedToLogin },
   },
   {
+    path: 'tutorials',
+    loadChildren: () =>
+      import('./tutorials/tutorials.routes').then((m) => m.routes),
+  },
+  {
     path: 'auth',
     loadChildren: () =>
       import('./authentication/authentication.routes').then((m) => m.routes),
