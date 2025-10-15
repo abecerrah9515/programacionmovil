@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import type { IonRefresherCustomEvent } from '@ionic/angular';
+import type { RefresherCustomEvent } from '@ionic/angular';
 import {
   IonBadge,
   IonButton,
@@ -35,7 +35,7 @@ import { firstValueFrom } from 'rxjs';
 import { Tutorial } from './tutorial.model';
 import { TutorialService } from './tutorial.service';
 
-type RefresherEvent = IonRefresherCustomEvent;
+type RefresherEvent = RefresherCustomEvent;
 
 @Component({
   selector: 'app-tutorials',
@@ -165,7 +165,7 @@ export class TutorialsPage {
     if (this.loading()) {
       return;
     }
-
+    debugger;
     this.loading.set(true);
     this.error.set(null);
 
