@@ -76,8 +76,14 @@ export class TutorialsPage {
   readonly tutorials = signal<Tutorial[]>([]);
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
+  readonly editingTutorialId = signal<string | null>(null);
 
   readonly tutorialForm = this.fb.nonNullable.group({
+    title: ['', [Validators.required, Validators.minLength(3)]],
+    description: [''],
+  });
+
+  readonly editForm = this.fb.nonNullable.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
     description: [''],
   });
@@ -110,6 +116,10 @@ export class TutorialsPage {
 
   trackByTutorialId(_: number, tutorial: Tutorial) {
     return tutorial.id;
+  }
+
+  isEditing(tutorial: Tutorial) {
+    return this.editingTutorialId() === tutorial.id;
   }
 
   async createTutorial() {
@@ -161,11 +171,58 @@ export class TutorialsPage {
     }
   }
 
+  startEdit(tutorial: Tutorial) {
+    if (this.loading()) {
+      return;
+    }
+
+    this.editingTutorialId.set(tutorial.id);
+    this.editForm.setValue({
+      title: tutorial.title,
+      description: tutorial.description ?? '',
+    });
+  }
+
+  cancelEdit() {
+    this.editingTutorialId.set(null);
+    this.editForm.reset({ title: '', description: '' });
+  }
+
+  async saveEdit(tutorial: Tutorial) {
+    if (
+      !this.isEditing(tutorial) ||
+      this.editForm.invalid ||
+      this.loading()
+    ) {
+      this.editForm.markAllAsTouched();
+      return;
+    }
+
+    this.loading.set(true);
+    this.error.set(null);
+
+    try {
+      await firstValueFrom(
+        this.tutorialService.update(tutorial.id, {
+          title: this.editForm.controls.title.value,
+          description: this.editForm.controls.description.value,
+        })
+      );
+      this.cancelEdit();
+      await this.fetchTutorials();
+    } catch (error) {
+      console.error('Error updating tutorial', error);
+      this.error.set('No se pudo actualizar el tutorial.');
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
   async removeTutorial(tutorial: Tutorial) {
     if (this.loading()) {
       return;
     }
-    debugger;
+
     this.loading.set(true);
     this.error.set(null);
 

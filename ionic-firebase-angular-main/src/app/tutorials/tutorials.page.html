@@ -74,27 +74,78 @@
           </div>
         </ion-card-header>
         <ion-card-content>
-          <p class="description">
-            {{ tutorial.description || 'Sin descripción disponible.' }}
-          </p>
-          <div class="actions">
-            <ion-button
-              size="small"
-              fill="outline"
-              color="primary"
-              (click)="togglePublished(tutorial)"
-            >
-              {{ tutorial.published ? 'Marcar como borrador' : 'Publicar' }}
-            </ion-button>
-            <ion-button
-              size="small"
-              fill="outline"
-              color="danger"
-              (click)="removeTutorial(tutorial)"
-            >
-              Eliminar
-            </ion-button>
-          </div>
+          @if (isEditing(tutorial)) {
+            <form class="edit-form" [formGroup]="editForm" (ngSubmit)="saveEdit(tutorial)">
+              <ion-list lines="none">
+                <ion-item>
+                  <ion-label position="stacked">Título</ion-label>
+                  <ion-input
+                    formControlName="title"
+                    autocomplete="off"
+                    required
+                    placeholder="Actualiza el título"
+                  ></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="stacked">Descripción</ion-label>
+                  <ion-textarea
+                    formControlName="description"
+                    autoGrow="true"
+                    placeholder="Actualiza la descripción"
+                  ></ion-textarea>
+                </ion-item>
+              </ion-list>
+              <div class="actions">
+                <ion-button
+                  type="submit"
+                  size="small"
+                  [disabled]="editForm.invalid || loading()"
+                >
+                  Guardar cambios
+                </ion-button>
+                <ion-button
+                  type="button"
+                  size="small"
+                  fill="outline"
+                  color="medium"
+                  (click)="cancelEdit()"
+                >
+                  Cancelar
+                </ion-button>
+              </div>
+            </form>
+          }
+          @else {
+            <p class="description">
+              {{ tutorial.description || 'Sin descripción disponible.' }}
+            </p>
+            <div class="actions">
+              <ion-button
+                size="small"
+                fill="outline"
+                color="primary"
+                (click)="togglePublished(tutorial)"
+              >
+                {{ tutorial.published ? 'Marcar como borrador' : 'Publicar' }}
+              </ion-button>
+              <ion-button
+                size="small"
+                fill="outline"
+                color="tertiary"
+                (click)="startEdit(tutorial)"
+              >
+                Editar
+              </ion-button>
+              <ion-button
+                size="small"
+                fill="outline"
+                color="danger"
+                (click)="removeTutorial(tutorial)"
+              >
+                Eliminar
+              </ion-button>
+            </div>
+          }
         </ion-card-content>
       </ion-card>
     }
